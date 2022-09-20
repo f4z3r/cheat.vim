@@ -8,39 +8,30 @@ if exists('b:current_syntax')
   finish
 endif
 
-" Statement preffixes
-syn keyword cheatTagSymbol %
-syn keyword cheatDescriptionSympol #
-syn keyword cheatVarSymbol $
-syn keyword cheatLinkSymbol @
+syn match cheatOperator "\(@\|\$\|#\|%\)" contained
 
-" Literals
-syn match cheatTag "%.*\(\w\)" display
-syn match cheatDesc "#\(.*\)$" display
-syn match cheatVar "$\(.*\):" display
-syn match cheatVarCommand "\$[^:]*:\(.*\)$" display
-syn match cheatLink "@.*\(\w\)" display
-syn match cheatCommand "^[^@%#\$].*$" display
+syn match cheatTag "%.*\(\w\)" contains=cheatOperator
+
+syn match cheatDesc "#\(.*\)$" contains=cheatOperator
+
+syn match cheatLink "@.*\(\w\)" contains=cheatOperator
+
+syn match cheatVarInCommand +<[^>]*>+ contained
+syn match cheatCommand "^[^@%#\$].*$" contains=cheatVarInCommand
+
+syn match cheatVar "\$\(.*\):" contained contains=cheatOperator
+syn match cheatVarCommand "\$[^:]*:\(.*\)$" contains=cheatVar,cheatOperator
 
 " Comment
 syn match cheatComment ";.*$" display
 
 " Highlighting
-hi link cheatTagSymbol Operator
-hi link cheatDescriptionSympol Operator
-hi link cheatVarSymbol Operator
-hi link cheatLinkSymbol Operator
+hi link cheatOperator Operator
 hi link cheatLink Type
-hi link cheatTag Keyword
-hi link cheatCommand Define
-hi link cheatVar Label
+hi link cheatTag Number
+hi link cheatCommand Keyword
+hi link cheatVarInCommand WarningMsg
+hi link cheatVar WarningMsg
 hi link cheatVarCommand String
-hi link cheatDesc Function
+hi link cheatDesc Identifier
 hi link cheatComment Comment
-
-
-" Boolean
-" Constant
-" Number
-" Repeat
-" Statement
